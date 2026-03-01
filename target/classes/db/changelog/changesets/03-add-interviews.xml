@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="03-create-interviews" author="system">
+        <createTable tableName="interviews">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="tenant_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="application_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="interviewer_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_time" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_time" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="meeting_link" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="interviews" baseColumnNames="application_id"
+                                 constraintName="fk_interview_application"
+                                 referencedTableName="applications" referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+        
+        <!-- Not doing FK to user for interviewer_id yet because interviewer could be any User from users table, but to keep simple we skip strict FK if needed, or add it -->
+        <addForeignKeyConstraint baseTableName="interviews" baseColumnNames="interviewer_id"
+                                 constraintName="fk_interview_user"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>
